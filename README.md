@@ -1,0 +1,5 @@
+# Pixie
+
+To run:
+
+`$ grunt`
