@@ -1,8 +1,8 @@
 var express = require('express'),
   router = express.Router(),
-  // config = require('../../config/config');
   mongoose = require('mongoose'),
-  twilio = require('twilio')(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN),
+  twilio = require('twilio'),
+  pwinty = require('pwinty')(process.env.PWINTY_API_KEY, process.env.PWINTY_MERCHANT_ID, 'https://sandbox.pwinty.com/v2.2')
   Article = mongoose.model('Article');
 
 module.exports = function (app) {
@@ -17,7 +17,9 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/send', function(req, res, next) {
-  twilio.sendMessage({
+  var client = new twilio.RestClient(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+
+  client.sendMessage({
     to: req.body.phone,
     // from: '+15005550006', // Twilio Test number
     from: '+12192274448', // live Twilio number
