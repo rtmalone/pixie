@@ -4,9 +4,11 @@ var path = require('path'),
 
 var config = {
   development: {
+    twilioSid: process.env.TWILIO_SID,
+    twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
     root: rootPath,
     app: {
-      name: 'pixt-pixie'
+      name: 'pixie'
     },
     port: 3000,
     db: 'mongodb://localhost/pixie-development'
@@ -15,7 +17,7 @@ var config = {
   test: {
     root: rootPath,
     app: {
-      name: 'pixt-pixie'
+      name: 'pixie'
     },
     port: 3000,
     db: 'mongodb://localhost/pixie-test'
@@ -24,7 +26,7 @@ var config = {
   production: {
     root: rootPath,
     app: {
-      name: 'pixt-pixie'
+      name: 'pixie'
     },
     port: 3000,
     db: 'mongodb://localhost/pixie-production'
