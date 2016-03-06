@@ -25,14 +25,11 @@ router.post('/sendMMS', function(req, res, next) {
     // from: process.env.TWILIO_PHONE_NUMBER, // live Twilio number
     body: req.body.message,
     mediaUrl: req.body.url
-  }, function(err, response){
-
-    if (!err) {
-      console.log('MMS yay!', response);
-    } else {
-      console.log('something is wrong');
-      console.log(err);
-    }
+  }).then(function(response){
+    console.log('MMS yay!', response);
+  }, function(err) {
+    console.log('something is wrong');
+    console.log(err);
   });
 });
 
@@ -65,6 +62,8 @@ router.post('/message', function(req, res, next) {
 
   pwintyOrder(req.body);
 });
+
+// TODO: refactor Pwinty Order into promis working with Twilio call.
 
 var pwintyOrder = function(twilioImageData) {
   var orderParams = {
