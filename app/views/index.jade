@@ -4,10 +4,17 @@ block content
   h1= title
   p Welcome to #{title}, #{description}
   
-  h2 Send Yourself A Picture
-  form(action='/send', method='POST')
+  //- h2 Send Yourself A Picture
+  //- form(action='/sendMMS', method='POST')
+  //-   input(type='text', name='phone', placeholder='enter a phone number')
+  //-   input(type='text', name='url', placeholder='paste a URL to a photo')
+  //-   input(type='text', name='message', 
+  //-     placeholder='optional - include a text message')
+  //-   input(type='submit', value='Send me the picture!')
+
+  h2 Send Yourself A SMS
+  form(action='/sendSMS', method='POST')
     input(type='text', name='phone', placeholder='enter a phone number')
-    input(type='text', name='url', placeholder='paste a URL to a photo')
     input(type='text', name='message', 
-      placeholder='optional - include a text message')
-    input(type='submit', value='Send me the picture!')
+      placeholder='include a text message')
+    input(type='submit', value='Send me the text!')

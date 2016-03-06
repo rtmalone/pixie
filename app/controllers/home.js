@@ -2,7 +2,7 @@ var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
   twilio = require('twilio'),
-  pwinty = require('pwinty')(process.env.PWINTY_API_KEY, process.env.PWINTY_MERCHANT_ID, 'https://sandbox.pwinty.com/v2.2')
+  pwinty = require('pwinty')(process.env.PWINTY_API_KEY, process.env.PWINTY_MERCHANT_ID, 'https://sandbox.pwinty.com/v2.2'),
   Article = mongoose.model('Article');
 
 module.exports = function (app) {
@@ -33,6 +33,21 @@ router.post('/send', function(req, res, next) {
       console.log('something is wrong');
       console.log(err);
     }
+  });
+});
+
+router.post('/sendSMS', function(req, res, next) {
+  var client = new twilio.RestClient(process.env.TWILIO_TEST_SID, process.env.TWILIO_TEST_AUTH_TOKEN);
+
+  client.sms.messages.post({
+    to: req.body.phone,
+    from: '+15005550006', // Twilio Test number
+    body: req.body.message
+  }).then(function(data){
+    console.log('SMS yay!', data);
+  }, function(err){
+    console.log('something is wrong');
+    console.log(err);
   });
 });
 
