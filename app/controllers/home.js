@@ -16,19 +16,19 @@ router.get('/', function (req, res, next) {
   });
 });
 
-router.post('/send', function(req, res, next) {
-  var client = new twilio.RestClient(process.env.TWILIO_SID, process.env.TWILIO_AUTH_TOKEN);
+router.post('/sendMMS', function(req, res, next) {
+  var client = new twilio.RestClient(process.env.TWILIO_TEST_SID, process.env.TWILIO_TEST_AUTH_TOKEN);
 
   client.sendMessage({
     to: req.body.phone,
-    // from: '+15005550006', // Twilio Test number
-    from: '+12192274448', // live Twilio number
+    from: process.env.TWILIO_TEST_PHONE_NUMBER, // Twilio Test number
+    // from: process.env.TWILIO_PHONE_NUMBER, // live Twilio number
     body: req.body.message,
     mediaUrl: req.body.url
   }, function(err, response){
 
     if (!err) {
-      console.log('yay!', response);
+      console.log('MMS yay!', response);
     } else {
       console.log('something is wrong');
       console.log(err);
