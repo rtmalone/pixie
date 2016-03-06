@@ -1,3 +1,5 @@
 langauge: node_js
 node_js:
+  - "5.0"
   - "4.0"
+sudo: required
