@@ -2,8 +2,7 @@ var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
   twilio = require('twilio'),
-  pwinty = require('pwinty')(process.env.PWINTY_API_KEY, process.env.PWINTY_MERCHANT_ID, 'https://sandbox.pwinty.com/v2.2'),
-  Article = mongoose.model('Article');
+  pwinty = require('pwinty')(process.env.PWINTY_API_KEY, process.env.PWINTY_MERCHANT_ID, 'https://sandbox.pwinty.com/v2.2');
 
 module.exports = function (app) {
   app.use('/', router);
