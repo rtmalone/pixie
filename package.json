@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "test": "mocha test/home.spec.js -w"
+    "test": "mocha test/home.spec.js -w -t 5000"
   },
   "dependencies": {
     "body-parser": "^1.13.3",

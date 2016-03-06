@@ -11,7 +11,7 @@ var config = {
       name: 'pixie'
     },
     port: 3000,
-    db: 'mongodb://localhost/pixie-development'
+    db: 'mongodb://localhost/pixt-dev'
   },
 
   test: {

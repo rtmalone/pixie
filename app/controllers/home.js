@@ -37,7 +37,8 @@ router.post('/sendSMS', function(req, res, next) {
 
   client.sms.messages.post({
     to: req.body.phone,
-    from: '+15005550006', // Twilio Test number
+    from: process.env.TWILIO_TEST_PHONE_NUMBER, // Twilio Test number
+    // from: process.env.TWILIO_PHONE_NUMBER, // live Twilio number
     body: req.body.message
   }).then(function(data){
     console.log('SMS yay!', data);
