@@ -4,8 +4,6 @@ var path = require('path'),
 
 var config = {
   development: {
-    twilioSid: process.env.TWILIO_SID,
-    twilioAuthToken: process.env.TWILIO_AUTH_TOKEN,
     root: rootPath,
     app: {
       name: 'pixie'
