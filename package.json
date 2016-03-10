@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node app.js",
-    "test": "mocha test/home.spec.js -w -t 5000"
+    "test": "mocha test/*.js -w -t 5000"
   },
   "dependencies": {
     "body-parser": "^1.13.3",
@@ -31,6 +31,8 @@
     "load-grunt-tasks": "^3.2.0",
     "mocha": "^2.4.5",
     "request": "^2.60.0",
+    "sinon": "^1.17.3",
+    "sinon-chai": "^2.8.0",
     "time-grunt": "^1.2.1"
   }
 }
