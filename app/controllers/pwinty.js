@@ -2,32 +2,11 @@
 var request = require('request'),
     Q = require('q');
 
-exports.order = function() {
-  var deferred = Q.defer();
-  var options = {
-    'headers': {
-      'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
-      'X-Pwinty-REST-API-Key': process.env.PWINTY_API_KEY
-    },
-    'json': true,
-    'url': 'https://sandbox.pwinty.com/v2.2/Orders',
-    'method': 'POST',
-    'body': orderParams = {
-      'recipientName': 'Tyler Malone',
-      'address1': '1438 McAlpine Ave',
-      'address2': '',
-      'addressTownOrCity': 'Nashville',
-      'stateOrCounty': 'TN',
-      'postalOrZipCode': '37216',
-      'countryCode': 'US',
-      'destinationCountryCode': 'US',
-      'useTrackedShipping': false,
-      'payment': 'InvoiceMe',
-      'qualityLevel': 'Standard'
-    }
-  };
 
-  request(options, function(err, res, body){
+exports.order = function(photoOpts) {
+  var deferred = Q.defer();
+
+  request(photoOpts, function(err, res, body){
     if (!err) {
       console.log('PWINTY res code: ', res.statusCode);
       console.log('PWINTY body: ', body);

@@ -4,6 +4,29 @@ var express = require('express'),
   twilio = require('twilio'),
   Pwinty = require('../controllers/pwinty');
 
+var orderOpts = {
+  'headers': {
+    'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
+    'X-Pwinty-REST-API-Key': process.env.PWINTY_API_KEY
+  },
+  'json': true,
+  'url': 'https://sandbox.pwinty.com/v2.2/Orders',
+  'method': 'POST',
+  'body': orderParams = {
+    'recipientName': 'Tyler Malone',
+    'address1': '1438 McAlpine Ave',
+    'address2': '',
+    'addressTownOrCity': 'Nashville',
+    'stateOrCounty': 'TN',
+    'postalOrZipCode': '37216',
+    'countryCode': 'US',
+    'destinationCountryCode': 'US',
+    'useTrackedShipping': false,
+    'payment': 'InvoiceMe',
+    'qualityLevel': 'Standard'
+  }
+};
+
 module.exports = function (app) {
   app.use('/', router);
 };
@@ -65,7 +88,7 @@ router.post('/message', function(req, res) {
   res.type('text/xml');
   res.send(twiml.toString());
 
-  Pwinty.order()
+  Pwinty.order(orderOpts)
     .then(Pwinty.addPhoto(order, req.body.MediaUrl0))
     .catch(console.log('PWINTY createOrder Error: ', err));
 });
