@@ -1,11 +1,10 @@
 var chai = require('chai'),
     expect = chai.expect,
     sinon = require('sinon'),
-    sinonChai = require('sinon-chai'),
     app = require('../app'),
     pwinty = require('../app/controllers/pwinty.js');
 
-chai.use(sinonChai);
+chai.use(require('sinon-chai'));
 
 var orderOpts = {
   'headers': {
@@ -32,16 +31,13 @@ var orderOpts = {
 
 describe('Pwinty tests', function(){
   var stub;
-  beforeEach(function(){
-    stub = sinon.stub(pwinty, 'order');
-  });
-
   afterEach(function(){
     stub.restore();
   });
 
   it('should create an order', function(done){
     // var orderObj = sinon.spy();
+    stub = sinon.stub(pwinty, 'order');
 
     stub.returns({
       "id": 1065,
@@ -81,9 +77,42 @@ describe('Pwinty tests', function(){
     expect(pwinty.order).to.be.calledOnce;
     expect(pwinty.order).to.be.calledWith(orderOpts);
 
+    expect(foo).to.be.an('object');
+    expect(foo).to.have.property('id');
     expect(foo.id).to.equal(1065);
 
     done();
 
+  });
+
+  it('should add an photo to the order', function(done){
+    stub = sinon.stub(pwinty, 'addPhoto');
+
+    stub.returns({
+      "id": 3456,
+      "type": "4x6",
+      "url": "http://www.flickr.com/mytestphoto.jpg",
+      "status": "NotYetDownloaded",
+      "copies": "4",
+      "sizing": "Crop",
+      "priceToUser" : 214,
+      "price" : 199,
+      "md5Hash" : "79054025255fb1a26e4bc422aef54eb4",
+      "previewUrl" : "http://s3.amazonaws.com/anexampleurl",
+      "thumbnailUrl" : "http://s3.amazonaws.com/anexamplethumbnailurl",
+      "attributes": {
+                      "frame_colour" : "silver"
+                   }
+    });
+
+    var foo = pwinty.addPhoto(1065, "http://s3.amazonaws.com/anexampleurl");
+
+    expect(pwinty.addPhoto).to.be.calledOnce;
+    expect(pwinty.addPhoto).to.be.calledWith(1065, "http://s3.amazonaws.com/anexampleurl");
+
+    expect(foo).to.have.property('id');
+    expect(foo).to.be.an('object');
+
+    done();
   });
 });
