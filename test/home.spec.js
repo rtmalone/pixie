@@ -2,7 +2,7 @@ var chai = require('chai'),
     expect = chai.expect,
     chaiHttp = require('chai-http'),
     app = require('../app'),
-    twilio = require('../app/controllers/home.js');
+    twilio = require('../app/routes/home.js');
 
 chai.use(chaiHttp);
 // var call = chai.request(app);

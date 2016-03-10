@@ -1,0 +1,18 @@
+var express = require('express'),
+  router = express.Router();
+
+// exporting Router instance for the 'foo' routes
+module.exports = function (app) {
+  app.use('/foo', router);
+};
+
+// Can establish middleware called for all 'foo' routes
+router.use(function (req, res, next) {
+  console.log('Timestamp: ', Date.now());
+  next();
+});
+
+// Handles request to '/foo/bar'
+router.get('/bar', function(res, req){
+  // code
+});
