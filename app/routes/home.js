@@ -8,14 +8,19 @@ module.exports = function (app) {
   app.use('/', router);
 };
 
-router.get('/', function (req, res, next) {
+router.use(function (req, res, next) {
+  console.log('Timestamp: ', Date.now());
+  next();
+});
+
+router.get('/', function (req, res) {
   res.render('index', {
     title: 'Pixie',
     description: 'the SMS/MMS application for Pixt.',
   });
 });
 
-router.post('/sendMMS', function(req, res, next) {
+router.post('/sendMMS', function(req, res) {
   var client = new twilio.RestClient(process.env.TWILIO_TEST_SID, process.env.TWILIO_TEST_AUTH_TOKEN);
 
   client.sendMessage({
@@ -32,7 +37,7 @@ router.post('/sendMMS', function(req, res, next) {
   });
 });
 
-router.post('/sendSMS', function(req, res, next) {
+router.post('/sendSMS', function(req, res) {
   var client = new twilio.RestClient(process.env.TWILIO_TEST_SID, process.env.TWILIO_TEST_AUTH_TOKEN);
 
   client.sms.messages.post({
@@ -48,7 +53,7 @@ router.post('/sendSMS', function(req, res, next) {
   });
 });
 
-router.post('/message', function(req, res, next) {
+router.post('/message', function(req, res) {
   console.log('Twilio request to POST /message', req.body);
   var twiml = new twilio.TwimlResponse();
 
