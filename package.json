@@ -1,4 +1,4 @@
-{ 
+{
   "name": "pixt-pixie",
   "version": "0.0.1",
   "private": true,
@@ -17,6 +17,7 @@
     "mongoose": "^4.1.2",
     "morgan": "^1.6.1",
     "pwinty": "^2.3.1",
+    "q": "^1.4.1",
     "serve-favicon": "^2.3.0",
     "twilio": "^2.9.0"
   },

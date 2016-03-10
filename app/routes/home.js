@@ -2,7 +2,7 @@ var express = require('express'),
   router = express.Router(),
   mongoose = require('mongoose'),
   twilio = require('twilio'),
-  Pwinty = require('../lib/pwinty');
+  Pwinty = require('../controllers/pwinty');
 
 module.exports = function (app) {
   app.use('/', router);
@@ -65,7 +65,7 @@ router.post('/message', function(req, res) {
   res.type('text/xml');
   res.send(twiml.toString());
 
-  Pwinty.order(req.body);
+  Pwinty.order()
+    .then(Pwinty.addPhoto(order, req.body.MediaUrl0))
+    .catch(console.log('PWINTY createOrder Error: ', err));
 });
-
-// TODO: refactor Pwinty Order into promis working with Twilio call.

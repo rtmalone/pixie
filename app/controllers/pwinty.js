@@ -1,7 +1,9 @@
 // var pwinty = require('pwinty')(process.env.PWINTY_API_KEY, process.env.PWINTY_MERCHANT_ID, 'https://sandbox.pwinty.com/v2.2'),
-var request = require('request');
+var request = require('request'),
+    Q = require('q');
 
-exports.order = function(twilioImageData) {
+exports.order = function() {
+  var deferred = Q.defer();
   var options = {
     'headers': {
       'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
@@ -25,28 +27,46 @@ exports.order = function(twilioImageData) {
     }
   };
 
-  // pwinty.createOrder(orderParams, function(err, order){
+  request(options, function(err, res, body){
+    if (!err) {
+      console.log('PWINTY res code: ', res.statusCode);
+      console.log('PWINTY body: ', body);
+      deferred.resolve(body);
+    } else {
+      // console.log('PWINTY err: ', err);
+      deferred.reject(err);
+    }
+  });
+  return deferred.promise;
+};
+
+exports.addPhoto = function(order, photoUrl) {
+  var options = {
+    'headers': {
+      'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
+      'X-Pwinty-REST-API-Key': process.env.PWINTY_API_KEY
+    },
+    'json': true,
+    'url': 'https://sandbox.pwinty.com/v2.2/Orders' + order.id + '/Photos',
+    'method': 'POST',
+    'body': photoOpts = {
+      'type': '4x4',
+      'url': photoUrl,
+      'copies': '1',
+      'sizing': 'crop',
+      'priceToUser': '100'
+    }
+  };
+
   request(options, function(err, response, body){
     if (!err) {
-      console.log('PWINTY res code: ', response.statusCode);
-      console.log('PWINTY body: ', body);
+      console.log('PWINTY addPhoto res code: ', response.statusCode);
+      console.log('PWINTY addPhoto body: ', body);
     } else {
-      console.log('PWINTY err: ', err);
+      console.log('PWINTY addPhoto err: ', err);
     }
 
-    // var photo = {
-    //   type: '4x4',
-    //   url: twilioImageData.MediaUrl0,
-    //   copies: '1',
-    //   sizing: 'crop',
-    //   priceToUser: '100'
-    // };
-    //
-    // if (err) {
-    //   res.render('error', {error: err, message: createOrder});
-    // } else {
-    //   console.log('Pwinty order created: ', order);
-    // }
+});
     //
     // pwinty.addPhotoToOrder(order.id, photo, function (err, order) {
     //   if (err) {
@@ -55,5 +75,4 @@ exports.order = function(twilioImageData) {
     //     console.log('photo added: ', order);
     //   }
     // });
-  });
 };
