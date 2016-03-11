@@ -90,5 +90,7 @@ router.post('/message', function(req, res) {
 
   Pwinty.order(orderOpts)
     .then(Pwinty.addPhoto(order, req.body.MediaUrl0))
+    .then(Pwinty.validateOrder(orderId))
+    .then(Pwinty.submitOrder())
     .catch(console.log('PWINTY createOrder Error: ', err));
 });

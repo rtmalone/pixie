@@ -20,6 +20,7 @@ exports.order = function(photoOpts) {
 };
 
 exports.addPhoto = function(order, photoUrl) {
+  var deferred = Q.defer();
   var options = {
     'headers': {
       'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
@@ -41,17 +42,63 @@ exports.addPhoto = function(order, photoUrl) {
     if (!err) {
       console.log('PWINTY addPhoto res code: ', response.statusCode);
       console.log('PWINTY addPhoto body: ', body);
+      deferred.resolve(order.id, body);
     } else {
       console.log('PWINTY addPhoto err: ', err);
+      deferred.reject(err);
     }
 
-});
-    //
-    // pwinty.addPhotoToOrder(order.id, photo, function (err, order) {
-    //   if (err) {
-    //     res.render('error', {error: err, message: 'addPhotoToOrder'});
-    //   } else {
-    //     console.log('photo added: ', order);
-    //   }
-    // });
+  });
+  return deferred.promise;
+};
+
+exports.validateOrder = function(orderId) {
+  var deferred = Q.defer();
+  var options = {
+    'headers': {
+      'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
+      'X-Pwinty-REST-API-Key': process.env.PWINTY_API_KEY
+    },
+    'json': true,
+    'url': 'https://sandbox.pwinty.com/v2.2/Orders' + orderId + '/SubmissionStatus',
+    'method': 'GET',
+  };
+
+  request(options, function(err, response, body){
+    if (!err) {
+      console.log('PWINTY validateOrder res code: ', response.statusCode);
+      console.log('PWINTY validateOrder body: ', body);
+      deferred.resolve(body);
+    } else {
+      console.log('PWINTY validateOrder err: ', err);
+      deferred.reject(err);
+    }
+  });
+  return deferred.promise;
+};
+
+exports.submitOrder = function(order) {
+  var deferred = Q.defer();
+  var options = {
+    'headers': {
+      'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
+      'X-Pwinty-REST-API-Key': process.env.PWINTY_API_KEY
+    },
+    'json': true,
+    'url': 'https://sandbox.pwinty.com/v2.2/Orders' + orderId + '/Status',
+    'method': 'POST',
+    'body': {'status': 'Submitted'}
+  };
+
+  request(options, function(err, response, body){
+    if (!err) {
+      console.log('PWINTY validateOrder res code: ', response.statusCode);
+      console.log('PWINTY validateOrder body: ', body);
+      deferred.resolve(order, body);
+    } else {
+      console.log('PWINTY validateOrder err: ', err);
+      deferred.reject(err);
+    }
+  });
+  return deferred.promise;
 };
