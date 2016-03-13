@@ -18,3 +18,17 @@ block content
     input(type='text', name='message', 
       placeholder='include a text message')
     input(type='submit', value='Send me the text!')
+
+  h2 Delete Media from Twilio
+  form(action='/deleteMedia', method='POST')
+    input(type='text', name='messageSid', placeholder='message Sid')
+    input(type='text', name='mediaSid', placeholder='media Sid')
+    input(type='submit', value='Delete the media')
+  if info
+      p= info
+
+  h2 test Pwinty
+  form(action='/testPwinty', method='POST')
+    input(type='text', name='testMessage', placeholder='enter anything you like')
+    input(type='submit', value='Test')
+      

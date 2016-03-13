@@ -3,24 +3,18 @@ var request = require('request'),
     Q = require('q');
 
 
-exports.order = function(photoOpts) {
-  var deferred = Q.defer();
+exports.order = function(order, callback) {
+  // var deferred = Q.defer();
 
-  request(photoOpts, function(err, res, body){
-    if (!err) {
-      console.log('PWINTY res code: ', res.statusCode);
-      console.log('PWINTY body: ', body);
-      deferred.resolve(body);
-    } else {
-      // console.log('PWINTY err: ', err);
-      deferred.reject(err);
-    }
+  request(order, function(err, res, body){
+      callback(err, body);
   });
-  return deferred.promise;
 };
 
-exports.addPhoto = function(order, photoUrl) {
-  var deferred = Q.defer();
+exports.addPhoto = function(order, photoUrl, callback) {
+  console.log('order', order);
+  console.log('photo', photoUrl);
+  // var deferred = Q.defer();
   var options = {
     'headers': {
       'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
@@ -29,7 +23,7 @@ exports.addPhoto = function(order, photoUrl) {
     'json': true,
     'url': 'https://sandbox.pwinty.com/v2.2/Orders' + order.id + '/Photos',
     'method': 'POST',
-    'body': photoOpts = {
+    'body': {
       'type': '4x4',
       'url': photoUrl,
       'copies': '1',
@@ -39,21 +33,15 @@ exports.addPhoto = function(order, photoUrl) {
   };
 
   request(options, function(err, response, body){
-    if (!err) {
-      console.log('PWINTY addPhoto res code: ', response.statusCode);
-      console.log('PWINTY addPhoto body: ', body);
-      deferred.resolve(order.id, body);
-    } else {
-      console.log('PWINTY addPhoto err: ', err);
-      deferred.reject(err);
-    }
-
+    console.log('err', err);
+    console.log('response', response.statusCode);
+    // console.log('body', body);
+    callback(err, body);
   });
-  return deferred.promise;
 };
 
-exports.validateOrder = function(orderId) {
-  var deferred = Q.defer();
+exports.validateOrder = function(orderId, callback) {
+  // var deferred = Q.defer();
   var options = {
     'headers': {
       'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
@@ -65,20 +53,12 @@ exports.validateOrder = function(orderId) {
   };
 
   request(options, function(err, response, body){
-    if (!err) {
-      console.log('PWINTY validateOrder res code: ', response.statusCode);
-      console.log('PWINTY validateOrder body: ', body);
-      deferred.resolve(body);
-    } else {
-      console.log('PWINTY validateOrder err: ', err);
-      deferred.reject(err);
-    }
+    callback(err, body);
   });
-  return deferred.promise;
 };
 
-exports.submitOrder = function(order) {
-  var deferred = Q.defer();
+exports.submitOrder = function(orderId, params, callback) {
+  // var deferred = Q.defer();
   var options = {
     'headers': {
       'X-Pwinty-MerchantId': process.env.PWINTY_MERCHANT_ID,
@@ -87,18 +67,10 @@ exports.submitOrder = function(order) {
     'json': true,
     'url': 'https://sandbox.pwinty.com/v2.2/Orders' + orderId + '/Status',
     'method': 'POST',
-    'body': {'status': 'Submitted'}
+    'body': params
   };
 
   request(options, function(err, response, body){
-    if (!err) {
-      console.log('PWINTY validateOrder res code: ', response.statusCode);
-      console.log('PWINTY validateOrder body: ', body);
-      deferred.resolve(order, body);
-    } else {
-      console.log('PWINTY validateOrder err: ', err);
-      deferred.reject(err);
-    }
+    callback(err, body);
   });
-  return deferred.promise;
 };
