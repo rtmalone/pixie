@@ -6,16 +6,16 @@ var config = {
   development: {
     root: rootPath,
     app: {
-      name: 'pixt-pixie'
+      name: 'pixie'
     },
     port: 3000,
-    db: 'mongodb://localhost/pixie-development'
+    db: 'mongodb://localhost/pixt-dev'
   },
 
   test: {
     root: rootPath,
     app: {
-      name: 'pixt-pixie'
+      name: 'pixie'
     },
     port: 3000,
     db: 'mongodb://localhost/pixie-test'
@@ -24,7 +24,7 @@ var config = {
   production: {
     root: rootPath,
     app: {
-      name: 'pixt-pixie'
+      name: 'pixie'
     },
     port: 3000,
     db: 'mongodb://localhost/pixie-production'

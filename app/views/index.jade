@@ -2,4 +2,33 @@ extends layout
 
 block content
   h1= title
-  p Welcome to #{title}
+  p Welcome to #{title}, #{description}
+  
+  h2 Send Yourself A Picture
+  form(action='/sendMMS', method='POST')
+    input(type='text', name='phone', placeholder='enter a phone number')
+    input(type='text', name='url', placeholder='paste a URL to a photo')
+    input(type='text', name='message', 
+      placeholder='optional - include a text message')
+    input(type='submit', value='Send me the picture!')
+
+  h2 Send Yourself A SMS
+  form(action='/sendSMS', method='POST')
+    input(type='text', name='phone', placeholder='enter a phone number')
+    input(type='text', name='message', 
+      placeholder='include a text message')
+    input(type='submit', value='Send me the text!')
+
+  h2 Delete Media from Twilio
+  form(action='/deleteMedia', method='POST')
+    input(type='text', name='messageSid', placeholder='message Sid')
+    input(type='text', name='mediaSid', placeholder='media Sid')
+    input(type='submit', value='Delete the media')
+  if info
+      p= info
+
+  h2 test Pwinty
+  form(action='/testPwinty', method='POST')
+    input(type='text', name='testMessage', placeholder='enter anything you like')
+    input(type='submit', value='Test')
+      

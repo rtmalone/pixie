@@ -3,6 +3,7 @@
 var express = require('express'),
   config = require('./config/config'),
   glob = require('glob'),
+  twilio = require('twilio'),
   mongoose = require('mongoose');
 
 mongoose.connect(config.db);
@@ -23,3 +24,4 @@ app.listen(config.port, function () {
   console.log('Express server listening on port ' + config.port);
 });
 
+module.exports = app;
