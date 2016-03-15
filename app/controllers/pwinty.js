@@ -21,10 +21,10 @@ exports.addPhoto = function(order, photoUrl, callback) {
       'X-Pwinty-REST-API-Key': process.env.PWINTY_API_KEY
     },
     'json': true,
-    'url': 'https://sandbox.pwinty.com/v2.2/Orders' + order.id + '/Photos',
+    'url': 'https://sandbox.pwinty.com/v2.2/Orders/' + order.id + '/Photos',
     'method': 'POST',
     'body': {
-      'type': '4x4',
+      'type': '4x6',
       'url': photoUrl,
       'copies': '1',
       'sizing': 'crop',
@@ -33,9 +33,6 @@ exports.addPhoto = function(order, photoUrl, callback) {
   };
 
   request(options, function(err, response, body){
-    console.log('err', err);
-    console.log('response', response.statusCode);
-    // console.log('body', body);
     callback(err, body);
   });
 };
@@ -48,7 +45,7 @@ exports.validateOrder = function(orderId, callback) {
       'X-Pwinty-REST-API-Key': process.env.PWINTY_API_KEY
     },
     'json': true,
-    'url': 'https://sandbox.pwinty.com/v2.2/Orders' + orderId + '/SubmissionStatus',
+    'url': 'https://sandbox.pwinty.com/v2.2/Orders/' + orderId + '/SubmissionStatus',
     'method': 'GET',
   };
 
@@ -65,7 +62,7 @@ exports.submitOrder = function(orderId, params, callback) {
       'X-Pwinty-REST-API-Key': process.env.PWINTY_API_KEY
     },
     'json': true,
-    'url': 'https://sandbox.pwinty.com/v2.2/Orders' + orderId + '/Status',
+    'url': 'https://sandbox.pwinty.com/v2.2/Orders/' + orderId + '/Status',
     'method': 'POST',
     'body': params
   };

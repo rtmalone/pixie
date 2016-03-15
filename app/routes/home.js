@@ -63,9 +63,9 @@ router.post('/sendMMS', function(req, res) {
 });
 
 router.post('/sendSMS', function(req, res) {
-  var client = new twilio.RestClient(process.env.TWILIO_TEST_SID, process.env.TWILIO_TEST_AUTH_TOKEN);
+  // var client = new twilio.RestClient;
 
-  client.sms.messages.post({
+  twilio.sms.messages.post({
     to: req.body.phone,
     from: process.env.TWILIO_TEST_PHONE_NUMBER, // Twilio Test number
     // from: process.env.TWILIO_PHONE_NUMBER, // live Twilio number
@@ -80,37 +80,26 @@ router.post('/sendSMS', function(req, res) {
 
 router.post('/message', function(req, res) {
   console.log('Twilio request to POST /message', req.body);
+  var client = new twilio.RestClient(process.env.TWILIO_TEST_SID, process.env.TWILIO_TEST_AUTH_TOKEN);
   var twimlThanks = new twilio.TwimlResponse(),
+      photoUrl = req.body.MediaUrl0,
       pwintyOrder = null;
 
   twimlThanks.message(function() {
-    this.body('Thanks!');
+    this.body('Thanks! Give me a moment to create your order...');
     // this.media('http://i.imgur.com/Act0Q.gif');
   });
 
   res.type('text/xml');
   res.send(twimlThanks.toString());
 
-
-  // Pwinty.order(orderOpts)
-  //   .then(Pwinty.addPhoto(order, req.body.MediaUrl0))
-  //   .then(Pwinty.validateOrder(orderId))
-  //   .then(Pwinty.submitOrder())
-  //   .catch(console.log('PWINTY createOrder Error: ', err));
-});
-
-router.post('/testPwinty', function(req, res){
-  var twimlSubmitted = new twilio.TwimlResponse();
-
-  console.log('testing');
-  console.log('before pwinty', orderOpts);
   Pwinty.order(orderOpts, function(err, order){
     if (err) {
       console.error('Pwinty create order error: ', err);
     } else {
       console.log('Pwinty order created!', order);
       pwintyOrder = order;
-      Pwinty.addPhoto('409345', testPhoto, function(err, photoInfo) {
+      Pwinty.addPhoto(order, photoUrl, function(err, photoInfo) {
         if (err) {
           console.error('Pwinty add photo error: ', err);
         } else {
@@ -120,7 +109,7 @@ router.post('/testPwinty', function(req, res){
               console.error('Pwinty get order status error', err);
             } else {
               console.log('Pwinty get order', orderInfo);
-              if (!isValid) {
+              if (orderInfo.isValid === false) {
                 console.error('Pwinty order status invalid', orderInfo.isValid);
               } else {
                 console.log('Pwinty order is valid!', orderInfo.isValid);
@@ -130,11 +119,68 @@ router.post('/testPwinty', function(req, res){
                     console.error('Pwinty submit order failed', err);
                   } else {
                     console.log('Pwinty order submitted!', data);
-                    twimlSubmitted.message(function(){
-                      this.body('Order has been submitted!');
 
-                      res.type('text/xml');
-                      res.send(twimlSubmitted.toString());
+                    client.sms.messages.post({
+                      to: '+16155161416',
+                      from: process.env.TWILIO_TEST_PHONE_NUMBER, // Twilio Test number
+                      // from: process.env.TWILIO_PHONE_NUMBER, // live Twilio number
+                      body: 'Order has been submitted!'
+                    }).then(function(data){
+                      console.log('SMS yay!', data);
+                    }, function(err){
+                      console.log('something is wrong');
+                      console.log(err);
+                    });
+                  }
+                });
+              }
+            }
+          });
+        }
+      });
+    }
+  });
+
+});
+
+router.post('/testPwinty', function(req, res){
+  Pwinty.order(orderOpts, function(err, order){
+    if (err) {
+      console.error('Pwinty create order error: ', err);
+    } else {
+      console.log('Pwinty order created!', order);
+      pwintyOrder = order;
+      Pwinty.addPhoto(order, testPhoto, function(err, photoInfo) {
+        if (err) {
+          console.error('Pwinty add photo error: ', err);
+        } else {
+          console.log('Pwinty photo added!', photoInfo);
+          Pwinty.validateOrder(pwintyOrder.id, function(err, orderInfo){
+            if (err) {
+              console.error('Pwinty get order status error', err);
+            } else {
+              console.log('Pwinty get order', orderInfo);
+              if (orderInfo.isValid === false) {
+                console.error('Pwinty order status invalid', orderInfo.isValid);
+              } else {
+                console.log('Pwinty order is valid!', orderInfo.isValid);
+                var params = {status: 'Submitted'};
+                Pwinty.submitOrder(order.id, params, function(err, data){
+                  if (err) {
+                    console.error('Pwinty submit order failed', err);
+                  } else {
+                    console.log('Pwinty order submitted!', data);
+
+                    twilio.sms.messages.post({
+                      to: '+16155161416',
+                      from: process.env.TWILIO_TEST_PHONE_NUMBER, // Twilio Test number
+                      // from: process.env.TWILIO_PHONE_NUMBER, // live Twilio number
+                      body: 'Order has been submitted!'
+                    }).then(function(data){
+                      console.log('SMS yay!', data);
+                    }, function(err){
+                      console.log('something is wrong');
+                      console.log(err);
                     });
                   }
                 });
